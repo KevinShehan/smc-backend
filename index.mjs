@@ -12,7 +12,7 @@ app.listen(PORT, () => {
 })
 
 // Connect to MongoDB
-mongoose.connect("localhost:27100/smc",)
+mongoose.connect("mongodb://localhost:27017/smcnoode")
 .then(() => {
     console.log("Connected to MongoDB")
 })
