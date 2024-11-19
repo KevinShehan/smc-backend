@@ -131,3 +131,42 @@ app.post('/login', async (req, res) => {
     }
   });
   
+// 3. CRUD for Teachers (Example)
+app.get('/teachers', authorize(['admin', 'teacher']), async (req, res) => {
+    try {
+      const teachers = await User.find({ role: 'teacher' });
+      res.json(teachers);
+    } catch (err) {
+      res.status(400).json({ error: err.message });
+    }
+  });
+  
+  app.post('/teachers', authorize(['admin']), async (req, res) => {
+    const { name, email, password } = req.body;
+  
+    try {
+      const newTeacher = new User({ name, email, password, role: 'teacher' });
+      await newTeacher.save();
+      res.status(201).json({ message: 'Teacher added successfully' });
+    } catch (err) {
+      res.status(400).json({ error: err.message });
+    }
+  });
+  
+  app.put('/teachers/:id', authorize(['admin']), async (req, res) => {
+    try {
+      const updatedTeacher = await User.findByIdAndUpdate(req.params.id, req.body, { new: true });
+      res.json(updatedTeacher);
+    } catch (err) {
+      res.status(400).json({ error: err.message });
+    }
+  });
+  
+  app.delete('/teachers/:id', authorize(['admin']), async (req, res) => {
+    try {
+      await User.findByIdAndDelete(req.params.id);
+      res.json({ message: 'Teacher deleted successfully' });
+    } catch (err) {
+      res.status(400).json({ error: err.message });
+    }
+  });
