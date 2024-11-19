@@ -80,3 +80,13 @@ passport.use(
     )
   );
 
+// Middleware for role-based access
+const authorize = roles => (req, res, next) => {
+    passport.authenticate('jwt', { session: false }, (err, user) => {
+      if (err || !user || !roles.includes(user.role)) {
+        return res.status(403).json({ message: 'Forbidden' });
+      }
+      req.user = user;
+      next();
+    })(req, res, next);
+  };
