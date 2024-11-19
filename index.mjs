@@ -12,15 +12,18 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+// Routes
+app.use('/api/users', userRoutes);
+
 app.listen(PORT, () => {
     console.log(`Server is Running on port ${PORT}`)
 })
 
 // Connect to MongoDB
 mongoose.connect("mongodb://localhost:27017/smcnoode")
-.then(() => {
-    console.log("Connected to MongoDB")
-})
-.catch((error) => {
-    console.error("Error connecting to MongoDB")
-})
+    .then(() => {
+        console.log("Connected to MongoDB")
+    })
+    .catch((error) => {
+        console.error("Error connecting to MongoDB")
+    });
