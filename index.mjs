@@ -60,4 +60,22 @@ userSchema.pre('save', async function (next) {
 });
 const User = mongoose.model('User', userSchema);
 
-// Generate QR code
+// JWT strategy for Passport
+passport.use(
+    new JwtStrategy(
+      {
+        jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+        secretOrKey: JWT_SECRET,
+      },
+      async (payload, done) => {
+        try {
+          const user = await User.findById(payload.id);
+          if (user) return done(null, user);
+          return done(null, false);
+        } catch (err) {
+          return done(err, false);
+        }
+      }
+    )
+  );
+  
