@@ -25,6 +25,9 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(passport.initialize());
 
+// Multer configuration
+// Multer setup for image uploads
+const upload = multer({ dest: 'uploads/' });
 // Routes
 // app.use('/api/users', userRoutes);
 
@@ -90,3 +93,22 @@ const authorize = roles => (req, res, next) => {
       next();
     })(req, res, next);
   };
+
+  // Routes
+// 1. Register
+app.post('/register', upload.single('image'), async (req, res) => {
+    const { name, email, password, role } = req.body;
+    const imagePath = req.file ? req.file.path : null;
+  
+    try {
+      const qrCodePath = `uploads/qr_${Date.now()}.png`;
+      await QRCode.toFile(qrCodePath, `Name: ${name}, Email: ${email}`);
+  
+      const newUser = new User({ name, email, password, role, imagePath, qrCodePath });
+      await newUser.save();
+  
+      res.status(201).json({ message: 'User registered successfully' });
+    } catch (err) {
+      res.status(400).json({ error: err.message });
+    }
+  });
