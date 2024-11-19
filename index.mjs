@@ -1,6 +1,17 @@
 import mongoose from "mongoose";
 import express from "express";
 import dotenv from "dotenv";
+import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
+import passport from 'passport';
+import { Strategy as JwtStrategy, ExtractJwt } from 'passport-jwt';
+import multer from 'multer';
+import QRCode from 'qrcode';
+import fs from 'fs';
+import path from 'path';
+
+
+// import userRoutes from './routes/User.route.js';
 dotenv.config();
 
 const PORT = process.env.PORT || 3000;
@@ -13,7 +24,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Routes
-app.use('/api/users', userRoutes);
+// app.use('/api/users', userRoutes);
 
 app.listen(PORT, () => {
     console.log(`Server is Running on port ${PORT}`)
