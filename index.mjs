@@ -23,6 +23,7 @@ const app = express();
 // Middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(passport.initialize());
 
 // Routes
 // app.use('/api/users', userRoutes);
@@ -78,4 +79,4 @@ passport.use(
       }
     )
   );
-  
+
