@@ -39,3 +39,13 @@ mongoose.connect("mongodb://localhost:27017/smcnoode")
     .catch((error) => {
         console.error("Error connecting to MongoDB")
     });
+
+// User schema
+const userSchema = new mongoose.Schema({
+    name: String,
+    email: { type: String, unique: true },
+    password: String,
+    role: { type: String, enum: ['admin', 'teacher', 'student'], default: 'student' },
+    imagePath: String,
+    qrCodePath: String,
+});
